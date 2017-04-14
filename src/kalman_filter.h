@@ -68,7 +68,7 @@ private:
   /**
    * Internal Update function
    */
-  void Update_(const Eigen::VectorXd &z, const Eigen::VectorXd &z_pred);
+  void Update_(const Eigen::VectorXd &y);
 
 };
 

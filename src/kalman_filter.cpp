@@ -3,6 +3,9 @@
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
+// define PI constant value
+const float PI = 3.1415926;
+
 KalmanFilter::KalmanFilter() {}
 
 KalmanFilter::~KalmanFilter() {}
@@ -26,8 +29,8 @@ void KalmanFilter::Predict() {
   P_ = F_ * P_ * Ft * Q_;
 }
 
-void KalmanFilter::Update_(const VectorXd &z, const VectorXd &z_pred) {
-  VectorXd y = z - z_pred;
+void KalmanFilter::Update_(const VectorXd &y) {
+  //VectorXd y = z - z_pred;
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();
@@ -46,7 +49,8 @@ void KalmanFilter::Update(const VectorXd &z) {
    * update the state by using Extended Kalman Filter equations
    */
   VectorXd z_pred = H_ * x_;
-  Update_(z, z_pred);
+  VectorXd y = z - z_pred;
+  Update_(y);
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
@@ -75,5 +79,27 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   
   z_pred << rho, theta, drho;
   
-  Update_(z, z_pred);
+  VectorXd y = z - z_pred;
+  
+  /*
+   * atan2() returns values between -pi and pi. When calculating phi in 
+   * y = z - h(x) for radar measurements, the resulting angle phi in the 
+   * y vector should be adjusted so that it is between -pi and pi. 
+   * The Kalman filter is expecting small angle values between the range 
+   * -pi and pi. HINT: when working in radians you can add 2π or subtract 
+   * 2π until the angle is within the desired range.
+   */
+  while (1) {
+    if (y(1) > PI) {
+      y(1) = y(1) - (2 * PI);
+    }
+    else if (y(1) < -PI) {
+      y(1) = y(1) + (2 * PI);
+    }
+    else {
+      break;
+    }
+  }
+  
+  Update_(y);
 }
