@@ -71,7 +71,7 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   /*
    * If denominator is 0, throw an error
    */
-  if (0 == px_py_2) {
+  if (fabs(px_py_2) < 0.0001) {
     std::cout << "Jacbian Error - Divide by zero\n";
     return Hj;
   }

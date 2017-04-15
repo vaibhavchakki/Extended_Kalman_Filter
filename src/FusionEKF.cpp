@@ -47,9 +47,9 @@ FusionEKF::FusionEKF() {
              0, 0, 0, 1000;
 
   // measurement matrix
-  ekf_.H_ = MatrixXd(2, 4);
-  ekf_.H_ << 1, 0, 0, 0,
-             0, 1, 0, 0;
+  //ekf_.H_ = MatrixXd(2, 4);
+  //ekf_.H_ << 1, 0, 0, 0,
+  //           0, 1, 0, 0;
              
   // initial transition matrix
   ekf_.F_ = MatrixXd(4, 4);
