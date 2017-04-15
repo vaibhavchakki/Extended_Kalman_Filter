@@ -58,7 +58,7 @@ FusionEKF::FusionEKF() {
              0, 0, 1, 0,
              0, 0, 0, 1;
 
-  // process covariance matrix
+  // initialize process covariance matrix
   ekf_.Q_ = MatrixXd(4, 4);
   
   // Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
